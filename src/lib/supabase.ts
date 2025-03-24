@@ -2,10 +2,24 @@ import { createClient } from "@supabase/supabase-js";
 import type { Database } from "../types/supabase";
 
 // Initialize the Supabase client
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "";
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "";
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey);
+// Check if environment variables are properly set
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error(
+    "Supabase URL or Anon Key is missing. Please check your .env file.",
+  );
+}
+
+// Use a default URL for development if not set (prevents constructor error)
+const fallbackUrl = "https://placeholder-project.supabase.co";
+const fallbackKey = "placeholder-key";
+
+export const supabase = createClient<Database>(
+  supabaseUrl || fallbackUrl,
+  supabaseAnonKey || fallbackKey,
+);
 
 // User authentication functions
 export const signUp = async (email: string, password: string) => {
