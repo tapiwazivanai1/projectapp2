@@ -19,13 +19,18 @@ const DonationPage: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  
+
   // This would come from your project hook
   const [project, setProject] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  
-  const { contribute, loading: contributionLoading, error, success } = useContributeToProject();
-  
+
+  const {
+    contribute,
+    loading: contributionLoading,
+    error,
+    success,
+  } = useContributeToProject();
+
   const [amount, setAmount] = useState("25");
   const [customAmount, setCustomAmount] = useState("");
   const [anonymous, setAnonymous] = useState(false);
@@ -39,8 +44,10 @@ const DonationPage: React.FC = () => {
       setProject({
         id: projectId,
         title: "Church Building Renovation",
-        description: "Help us renovate the main sanctuary to accommodate our growing congregation and improve facilities.",
-        image: "https://images.unsplash.com/photo-1543674892-7d64d45df18d?w=600&q=80",
+        description:
+          "Help us renovate the main sanctuary to accommodate our growing congregation and improve facilities.",
+        image:
+          "https://images.unsplash.com/photo-1543674892-7d64d45df18d?w=600&q=80",
         currentAmount: 15000,
         goalAmount: 50000,
         deadline: "2023-12-31",
@@ -67,22 +74,23 @@ const DonationPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    const donationAmount = amount === "custom" ? parseFloat(customAmount) : parseFloat(amount);
-    
+
+    const donationAmount =
+      amount === "custom" ? parseFloat(customAmount) : parseFloat(amount);
+
     if (isNaN(donationAmount) || donationAmount <= 0) {
       return; // Invalid amount
     }
-    
+
     const result = await contribute({
       projectId: projectId || "",
       amount: donationAmount,
       anonymous,
     });
-    
+
     if (result.success) {
       setIsSubmitted(true);
-      
+
       // Redirect after 3 seconds
       setTimeout(() => {
         navigate("/profile");
@@ -114,8 +122,9 @@ const DonationPage: React.FC = () => {
               Thank You for Your Contribution!
             </h1>
             <p className="text-gray-600 mb-6">
-              Your donation of ${amount === "custom" ? customAmount : amount} to {project?.title} has been received.
-              A receipt has been sent to your email address.
+              Your donation of ${amount === "custom" ? customAmount : amount} to{" "}
+              {project?.title} has been received. A receipt has been sent to
+              your email address.
             </p>
             <p className="text-sm text-gray-500 mb-4">
               Redirecting to your profile...
@@ -173,7 +182,9 @@ const DonationPage: React.FC = () => {
                       />
                     </div>
                     <div className="md:w-2/3">
-                      <p className="text-gray-700 mb-3">{project.description}</p>
+                      <p className="text-gray-700 mb-3">
+                        {project.description}
+                      </p>
                       <div className="space-y-2">
                         <div className="flex justify-between text-sm">
                           <span className="font-medium text-gray-700">
@@ -184,7 +195,9 @@ const DonationPage: React.FC = () => {
                           </span>
                         </div>
                         <Progress
-                          value={(project.currentAmount / project.goalAmount) * 100}
+                          value={
+                            (project.currentAmount / project.goalAmount) * 100
+                          }
                           className="h-2 bg-gray-200"
                         />
                       </div>
@@ -241,4 +254,32 @@ const DonationPage: React.FC = () => {
                 <input
                   type="checkbox"
                   id="anonymous"
-                  checked={anonymous
+                  checked={anonymous}
+                  onChange={(e) => setAnonymous(e.target.checked)}
+                />
+                <Label htmlFor="anonymous">
+                  Make my contribution anonymous
+                </Label>
+              </div>
+
+              {/* Payment Method - Not implemented yet */}
+
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={contributionLoading}
+              >
+                {contributionLoading
+                  ? "Processing..."
+                  : "Complete Contribution"}
+              </Button>
+            </form>
+          </div>
+        </RequireAuth>
+      </main>
+      <BottomNav />
+    </div>
+  );
+};
+
+export default DonationPage;
