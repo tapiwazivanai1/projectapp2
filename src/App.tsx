@@ -10,6 +10,8 @@ const MagazineContributePage = lazy(
 );
 const ProjectsPage = lazy(() => import("./pages/ProjectsPage"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
+const AuthPage = lazy(() => import("./pages/AuthPage"));
+const DonationPage = lazy(() => import("./pages/DonationPage"));
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
           />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/auth" element={<AuthPage />} />
+          <Route path="/donate/:projectId" element={<DonationPage />} />
           <Route
             path="/contribute"
             element={<Navigate to="/magazine/contribute" replace />}

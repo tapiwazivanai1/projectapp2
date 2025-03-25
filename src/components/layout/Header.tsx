@@ -199,7 +199,9 @@ const Header = ({
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="text-red-600">
-                Log out
+                <Link to="/auth" className="flex w-full items-center">
+                  Sign In / Sign Up
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
